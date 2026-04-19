@@ -60,23 +60,16 @@ void Drivetrain::startForwardMotion(double d){
 }
 
 double Drivetrain::getRobotYaw(int type){
-  // ESP32 dual-DAC encoding:
-  //   port C (imuPos): positive yaw  0->180 deg = 0->3300 mV
-  //   port D (imuNeg): negative yaw  0->-180 deg = 0->3300 mV
-  const double MV_MAX = 3300.0;
-  double mvPos = (double)imuPos.value(vex::analogUnits::mV);
-  double mvNeg = (double)imuNeg.value(vex::analogUnits::mV);
-  double yawDeg;
-  if (mvPos >= mvNeg) {
-    yawDeg =  (mvPos / MV_MAX) * 180.0;
-  } else {
-    yawDeg = -(mvNeg / MV_MAX) * 180.0;
-  }
-  yawDeg -= resetedHeading * 180.0 / PI;
-  while (yawDeg >  180.0) yawDeg -= 360.0;
-  while (yawDeg < -180.0) yawDeg += 360.0;
-  if (type == DEGREES) return yawDeg;
-  return yawDeg * PI / 180.0;
+  double lval = leftBack.position(rotationUnits::rev) + leftFront.position(rotationUnits::rev);
+  double rval = rightBack.position(rotationUnits::rev) + rightFront.position(rotationUnits::rev);
+  lval /= 2.0; rval /= 2.0;
+  lval *= distanceWheels; rval *= distanceWheels;
+  double rads = ((lval - rval) / 2.0) / (distanceWheels / 2.0);
+  rads -= resetedHeading;
+  while(rads < -PI) rads += 2*PI;
+  while(rads > PI)  rads -= 2*PI;
+  if(type == RADIANS) return rads;
+  return rads * 180.0 / PI;
 }
 void Drivetrain::resetHeading(double to){
   resetedHeading = getRobotYaw(RADIANS) + resetedHeading + to;
