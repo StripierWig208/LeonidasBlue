@@ -135,11 +135,11 @@ void driveDistance(double mm, double heading = 0) {
 
 void autonomous(void) {
   driveDistance(98);
-  rotateToAngle(145);
+  rotateToAngle(148);
   incline.setState(HIGH);
   guide.setState(GUIDE_DOWN);
-  // intake.setState(INTAKE);
-  driveDistance(-45, 145); // guide goes down during this move
+  intake.setState(INTAKE);
+  driveDistance(-30, 130);
 
   for (int i = 0; i < 100; i++) {
     incline.update();
@@ -149,24 +149,38 @@ void autonomous(void) {
     wait(1, msec);
   }
 
-  driveDistance(110, 145);
+  driveDistance(70, 140);
 
-  // shake back and forth to help intake
-  for (int i = 0; i < 1; i++) {
-    driveDistance(-40, 145);
-    for (int j = 0; j < 100; j++) { // 1 second wait while intake runs
-      incline.update();
-      intake.update();
-      outtake.update();
-      guide.update();
-      wait(4, msec);
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 100; j++) {
+      incline.update(); intake.update(); outtake.update(); guide.update();
+      wait(8, msec);
     }
-    driveDistance(60, 145);
+    driveDistance(-45, 130);
+    driveDistance(70, 130);
   }
-  driveDistance(-50, 169);
-  driveDistance(-45, 150);
+  driveDistance(-50, 145);
+  driveDistance(-45, 130);
   outtake.setState(OPEN);
-  driveDistance(-35, 152);
+  driveDistance(-37, 130);
+  for (int i = 0; i < 300; i++) {
+    incline.update(); intake.update(); outtake.update(); guide.update();
+    wait(8, msec);
+  }
+  for (int i = 0; i < 250; i++) {
+    intake.setState(REVERSE);
+    incline.update(); intake.update(); outtake.update(); guide.update();
+    wait(2, msec);
+    intake.setState(INTAKE);
+    incline.update(); intake.update(); outtake.update(); guide.update();
+    wait(3, msec);
+  }
+  outtake.setState(CLOSE);
+  driveDistance(50, 130);
+  rotateToAngle(320);
+  guide.setState(GUIDE_UP);
+  
+
 }
 
 aivision::colordesc COL1(1, 242, 90, 90, 10, 0.20);
@@ -312,14 +326,27 @@ void backAndforth(){
 }
 
 void testImu(){
-  while(1){
+  // while(1){
+  //   Brain.Screen.clearScreen();
+  //   Brain.Screen.printAt(3, 60, "pos: %lf", ((double)imuPos.value(vex::analogUnits::mV) - 147.0) / (3142.0 - 147.0) * 180.0);
+  //   Brain.Screen.printAt(3, 40, "nog: %lf", ((double)imuNeg.value(vex::analogUnits::mV) - 103.0) / (3092.0 - 103.0));
+  //   Brain.Screen.printAt(3, 20, "yaw: %lfdeg", dt.getRobotYaw(DEGREES));
+  //   wait(5, msec);
+  // }
+  while(1)
+  {
     Brain.Screen.clearScreen();
-    Brain.Screen.printAt(3, 20, "pos: %lf", ((double)imuPos.value(vex::analogUnits::mV) - 147.0) / (3142.0 - 147.0) * 180.0);
-    Brain.Screen.printAt(3, 40, "nog: %lf", ((double)imuNeg.value(vex::analogUnits::mV) - 103.0) / (3092.0 - 103.0));
+    imuPos.value(analogUnits::mV);
+    imuNeg.value(analogUnits::mV);
+    Brain.Screen.printAt(3, 60, "pos: %d", (imuPos.value(vex::analogUnits::mV)));
+    Brain.Screen.printAt(3, 40, "neg: %d", (imuNeg.value(vex::analogUnits::mV)));
     Brain.Screen.printAt(3, 20, "yaw: %lfdeg", dt.getRobotYaw(DEGREES));
-    wait(5, msec);
+    wait (3,msec);
   }
+  
 }
+
+
 
 void testAMP(){
   motor test(PORT12);
@@ -367,14 +394,13 @@ int main() {
   con.ButtonY.pressed(cycleY);
 
   //Competition.autonomous(autonomous);
-  //Competition.drivercontrol(autonomous);
-  //Competition.drivercontrol(autonomous);
+  Competition.drivercontrol(autonomous);
 
-  while (true) {
-    Brain.Screen.clearScreen();
-    Brain.Screen.printAt(3, 20, "yaw: %.1f deg", dt.getRobotYaw(DEGREES));
-    Brain.Screen.printAt(3, 40, "C(pos): %d mV", imuPos.value(vex::analogUnits::mV));
-    Brain.Screen.printAt(3, 60, "D(neg): %d mV", imuNeg.value(vex::analogUnits::mV));
-    wait(50, msec);
-  }
+  // while (true) {
+  //   Brain.Screen.clearScreen();
+  //   Brain.Screen.printAt(3, 20, "yaw: %.1f deg", dt.getRobotYaw(DEGREES));
+  //   Brain.Screen.printAt(3, 40, "C(pos): %d mV", imuPos.value(vex::analogUnits::mV));
+  //   Brain.Screen.printAt(3, 60, "D(neg): %d mV", imuNeg.value(vex::analogUnits::mV));
+  //   wait(50, msec);
+  // }
 }
