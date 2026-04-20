@@ -11,6 +11,18 @@ IntakeGuide::IntakeGuide()
 void IntakeGuide::update() {
   switch (state) {
     case GUIDE_DOWN:
+      if (abs(guide.velocity(velocityUnits::rpm)) < 5 &&
+          abs(guide.position(degrees) - (-430)) > 10) {
+        stallCount++;
+      } else {
+        stallCount = 0;
+      }
+      if (stallCount > 5) {
+        guide.stop(hold);
+        guide.setPosition(-430, degrees);
+        stallCount = 0;
+        break;
+      }
       guide.spinToPosition(-430, degrees, 200, velocityUnits::rpm, false);
       break;
     case GUIDE_UP:

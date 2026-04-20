@@ -13,6 +13,7 @@ enum IntakeGuideState {
 class IntakeGuide {
 private:
   IntakeGuideState state;
+  int stallCount = 0;
   motor guide;
 
 public:

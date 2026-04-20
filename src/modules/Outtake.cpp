@@ -19,7 +19,7 @@ void Outtake::update(){
         break;
       }
       case OPEN:{
-        door.spinToPosition(96,deg, 200, rpm,false);
+        door.spinToPosition(99,deg, 200, rpm,false);
         break;
       }
       case STUCK:{

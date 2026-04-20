@@ -2,9 +2,7 @@
 #include "vex.h"
 
 class MotionProfile{
-    double acceleration = 0;
-    double decceleration = 0;
-    double maxVelocity = 0;
+    
     double maxUsedVelocity = 0;
     double position = 0;
     double startPos = 0;
@@ -12,6 +10,9 @@ class MotionProfile{
     vex::timer time_;
     int sgn = 1;
 public:
+    double acceleration = 0;
+    double decceleration = 0;
+    double maxVelocity = 0;
     MotionProfile(double Acc, double Decc, double MaxVel);
     void startMotion(double targetMotion);
     void setStartPos(double pos);

@@ -33,6 +33,7 @@ int xCycleState = 0;
 int yCycleState = 0;
 
 
+
 void toggleIntakeForward() {
   xCycleState = 0;
   yCycleState = 0;
@@ -134,13 +135,13 @@ void driveDistance(double mm, double heading = 0) {
 }
 
 void autonomous(void) {
-  driveDistance(98);
-  rotateToAngle(148);
+  driveDistance(97);
+  rotateToAngle(154);
   incline.setState(HIGH);
   guide.setState(GUIDE_DOWN);
   intake.setState(INTAKE);
-  driveDistance(-30, 130);
-
+  driveDistance(-30, 132);
+  dt.forwardProfile.decceleration = 1000;
   for (int i = 0; i < 100; i++) {
     incline.update();
     guide.update();
@@ -148,38 +149,91 @@ void autonomous(void) {
     outtake.update();
     wait(1, msec);
   }
-
-  driveDistance(70, 140);
-
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < 100; j++) {
+  dt.forwardProfile.decceleration = 150;
+  driveDistance(73, 127);
+  for (int j = 0; j < 100; j++) {
       incline.update(); intake.update(); outtake.update(); guide.update();
       wait(8, msec);
     }
-    driveDistance(-45, 130);
-    driveDistance(70, 130);
-  }
-  driveDistance(-50, 145);
-  driveDistance(-45, 130);
+
+
+  // for (int i = 0; i < 1; i++) {
+  //   for (int j = 0; j < 100; j++) {
+  //     incline.update(); intake.update(); outtake.update(); guide.update();
+  //     wait(8, msec);
+  //   }
+  //   driveDistance(-45, 130);
+  //   guide.setState(GUIDE_DOWN);
+  //   driveDistance(57, 125);
+  // }//de schimbat dupa ce merge fata spate
+  driveDistance(-88, 137);
+  driveDistance(-20, 130);
   outtake.setState(OPEN);
-  driveDistance(-37, 130);
+  driveDistance(-37, 128);
   for (int i = 0; i < 300; i++) {
     incline.update(); intake.update(); outtake.update(); guide.update();
-    wait(8, msec);
-  }
-  for (int i = 0; i < 250; i++) {
-    intake.setState(REVERSE);
-    incline.update(); intake.update(); outtake.update(); guide.update();
-    wait(2, msec);
-    intake.setState(INTAKE);
-    incline.update(); intake.update(); outtake.update(); guide.update();
-    wait(3, msec);
+    wait(20, msec);
   }
   outtake.setState(CLOSE);
-  driveDistance(50, 130);
-  rotateToAngle(320);
+  driveDistance(50, dt.getRobotYaw(DEGREES));
+  driveDistance(85, 130);
+
+  for (int j = 0; j < 100; j++) {
+      incline.update(); intake.update(); outtake.update(); guide.update();
+      wait(8, msec);
+    }
+
+  // for (int i = 0; i < 1; i++) {
+  //   for (int j = 0; j < 100; j++) {
+  //     incline.update(); intake.update(); outtake.update(); guide.update();
+  //     wait(8, msec);
+  //   }
+  //   guide.setState(GUIDE_DOWN);
+  //   driveDistance(-45, 130);
+  //   driveDistance(57, 125);
+  // }//de schimbat dupa ce merge fata spate
+
+  driveDistance(-88, 137);
+  driveDistance(-20, 130);
+  outtake.setState(OPEN);
+  driveDistance(-37, 128);
+  for (int i = 0; i < 300; i++) {
+    incline.update(); intake.update(); outtake.update(); guide.update();
+    wait(20, msec);
+  }
+  outtake.setState(CLOSE);
+  driveDistance(30, dt.getRobotYaw(DEGREES));
   guide.setState(GUIDE_UP);
+  driveDistance(40, 135);
+
+
+  // // dt.resetDriveRotations();
+  // outtake.setState(CLOSE);
+  // driveDistance(60);
   
+  // for (int i = 0; i < 300; i++) {
+  //   incline.update(); intake.update(); outtake.update(); guide.update();
+  //   wait(8, msec);
+  // }
+  // for (int i = 0; i < 250; i++) {
+  //   intake.setState(REVERSE);
+  //   incline.update(); intake.update(); outtake.update(); guide.update();
+  //   wait(2, msec);
+  //   intake.setState(INTAKE);
+  //   incline.update(); intake.update(); outtake.update(); guide.update();
+  //   wait(3, msec);
+  // }
+  // outtake.setState(CLOSE);
+  // driveDistance(50, 130);
+  // rotateToAngle(-120);
+  // guide.setState(GUIDE_UP);
+  // for (int i = 0; i < 50; i++) {
+  //   guide.update();
+  //   wait(10, msec);
+  // }
+  // driveDistance(70, -120);
+  // rotateToAngle(-30);
+  // driveDistance(50, -30);
 
 }
 

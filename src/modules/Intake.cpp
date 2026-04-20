@@ -19,13 +19,24 @@ void Intake::update(){
       break;
     }
     case INTAKE:{
-     // inclineLeft.spinToPosition(80, degrees, 100, velocityUnits::rpm);
-      //inclineRight.spinToPosition(-80, degrees, 100, velocityUnits::rpm);
+      bool stalled = abs(intakeInside.velocity(velocityUnits::rpm)) < 10 &&
+                     abs(intakeOutside.velocity(velocityUnits::rpm)) < 10 &&
+                     abs(intakeOpposite.velocity(velocityUnits::rpm)) < 10 &&
+                     abs(intakeOppositeOutside.velocity(velocityUnits::rpm)) < 10;
+      if (stalled) stallCount++; else stallCount = 0;
+      if (stallCount > 3) {
+        intakeOutside.spin(forward, -200, rpm);
+        intakeInside.spin(forward, -200, rpm);
+        intakeOpposite.spin(forward, -200, rpm);
+        intakeOppositeOutside.spin(forward, -200, rpm);
+        wait(5, msec);
+        stallCount = 0;
+        break;
+      }
       intakeOutside.spin(forward,200,rpm);
       intakeInside.spin(forward,200,rpm);
       intakeOpposite.spin(forward,200,rpm);
       intakeOppositeOutside.spin(forward,200,rpm);
-
       break;
     }
     case REVERSE:{

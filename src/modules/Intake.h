@@ -12,6 +12,7 @@ enum Viteza{
 class Intake{
   private:
   Viteza state;
+  int stallCount = 0;
   motor intakeInside,intakeOutside,intakeOpposite,intakeOppositeOutside;
   public:
   Intake();
