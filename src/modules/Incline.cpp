@@ -21,17 +21,11 @@ void Incline::home() {
   // Stall detection: if position stops changing, we've hit the hard stop
   double prevPos = inclineLeft.position(deg);
   int stableCount = 0;
-
-  while (stableCount < 4) {
-    wait(30, msec);
-    double currPos = inclineLeft.position(deg);
-    if (fabs(currPos - prevPos) < 2.0) {
-      stableCount++;
-    } else {
-      stableCount = 0;
-    }
-    prevPos = currPos;
-  }
+  timer t;
+  t.reset();
+  while (inclineLeft.current() >= 100 && 
+         inclineRight.current() >= 100 && 
+         t.time(sec) < 2) {}
 
   inclineLeft.stop(hold);
   inclineRight.stop(hold);

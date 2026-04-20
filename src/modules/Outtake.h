@@ -15,9 +15,13 @@ class Outtake{
   motor door;
 
   public:
+  distance senzor1;
+  distance senzor2;
   Outtake();
   void update();
   void home();
   OuttakeState getState();
   void setState(OuttakeState state);
+  bool hasObject1();
+  bool hasObject2();
 };

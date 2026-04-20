@@ -86,7 +86,7 @@ bool Drivetrain::setHeading(double heading, motorPowers& p) { // in deg
 }
 
 void Drivetrain::setPower(motorPowers pow){
-  leftDrive.spin(pow.left > 0 ? directionType::fwd : directionType::fwd, pow.left * voltage, volt);
+  leftDrive.spin(pow.left > 0 ? directionType::fwd : directionType::fwd, pow.left * voltage * speedMultiplier * 1.01, volt);
   rightDrive.spin(pow.right > 0 ? directionType::fwd : directionType::fwd, pow.right * voltage, volt);
 
 }

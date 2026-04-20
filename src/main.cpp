@@ -135,26 +135,28 @@ void driveDistance(double mm, double heading = 0) {
 }
 
 void autonomous(void) {
-  driveDistance(97);
+  incline.home();
+  driveDistance(103);
   rotateToAngle(154);
   incline.setState(HIGH);
   guide.setState(GUIDE_DOWN);
   intake.setState(INTAKE);
-  driveDistance(-30, 132);
+  driveDistance(-30, 130);
   dt.forwardProfile.decceleration = 1000;
   for (int i = 0; i < 100; i++) {
     incline.update();
     guide.update();
     intake.update();
     outtake.update();
-    wait(1, msec);
+    wait(3, msec);
   }
   dt.forwardProfile.decceleration = 150;
   driveDistance(73, 127);
-  for (int j = 0; j < 100; j++) {
-      incline.update(); intake.update(); outtake.update(); guide.update();
-      wait(8, msec);
-    }
+  timer t;
+  // t.reset();
+  // while (t.time(sec) < 6 && (outtake.hasObject2() && t.time(sec)>1) ){
+  //     incline.update(); intake.update(); outtake.update(); guide.update();
+  // }
 
 
   // for (int i = 0; i < 1; i++) {
@@ -170,18 +172,17 @@ void autonomous(void) {
   driveDistance(-20, 130);
   outtake.setState(OPEN);
   driveDistance(-37, 128);
-  for (int i = 0; i < 300; i++) {
-    incline.update(); intake.update(); outtake.update(); guide.update();
-    wait(20, msec);
-  }
+  
+  // while (t.time(sec) < 6 && outtake.hasObject1()) {
+  //   incline.update(); intake.update(); outtake.update(); guide.update();
+  // }
   outtake.setState(CLOSE);
   driveDistance(50, dt.getRobotYaw(DEGREES));
   driveDistance(85, 130);
 
-  for (int j = 0; j < 100; j++) {
-      incline.update(); intake.update(); outtake.update(); guide.update();
-      wait(8, msec);
-    }
+  // while (t.time(sec) < 6 && (outtake.hasObject2() && t.time(sec)>1)) {
+  //     incline.update(); intake.update(); outtake.update(); guide.update();
+  //   }
 
   // for (int i = 0; i < 1; i++) {
   //   for (int j = 0; j < 100; j++) {
@@ -197,9 +198,8 @@ void autonomous(void) {
   driveDistance(-20, 130);
   outtake.setState(OPEN);
   driveDistance(-37, 128);
-  for (int i = 0; i < 300; i++) {
+  while (t.time(sec) < 6 && outtake.hasObject1()) {
     incline.update(); intake.update(); outtake.update(); guide.update();
-    wait(20, msec);
   }
   outtake.setState(CLOSE);
   driveDistance(30, dt.getRobotYaw(DEGREES));
